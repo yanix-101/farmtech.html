@@ -1,0 +1,88 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FarmTech</title>
+<style>
+:root{--g:#2E9E5B;--o:#FF8A3D;--bg:#FAF7F0;--c:#fff;--t:#1d2b22;--m:#6b7a70;--l:#e6e9e1}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#121a15;--c:#1b261f;--t:#eef3ee;--m:#9aab9f;--l:#2a382e}}
+:root[data-theme=dark]{--bg:#121a15;--c:#1b261f;--t:#eef3ee;--m:#9aab9f;--l:#2a382e}
+*{box-sizing:border-box;margin:0;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif}
+body{background:var(--bg);color:var(--t)}
+#app{max-width:430px;margin:auto;min-height:100vh;display:flex;flex-direction:column;position:relative;background:var(--bg)}
+header{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;font-weight:800;font-size:20px;color:var(--g)}
+header button{background:var(--c);border:1px solid var(--l);border-radius:20px;padding:6px 12px;font-size:13px;color:var(--t);cursor:pointer}
+main{flex:1;padding:0 16px 90px;overflow-y:auto}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--c);border-top:1px solid var(--l);display:flex;padding:6px 0 10px}
+nav button{flex:1;background:none;border:0;font-size:11px;color:var(--m);display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}
+nav button span{font-size:22px}nav button.on{color:var(--g);font-weight:800}
+.card{background:var(--c);border-radius:20px;padding:14px;margin:10px 0;border:1px solid var(--l)}
+.btn{background:var(--g);color:#fff;border:0;border-radius:14px;padding:12px 16px;font-weight:700;font-size:15px;width:100%;cursor:pointer}
+.btn.o{background:var(--o)}.btn.s{width:auto;padding:8px 14px;font-size:13px}.btn.x{background:var(--l);color:var(--t)}
+h2{margin:14px 0 4px;font-size:18px}
+.row{display:flex;gap:10px;align-items:center}.sp{justify-content:space-between}
+.big{font-size:44px}.chip{display:inline-block;background:#2e9e5b22;color:var(--g);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:700}
+.chip.o{background:#ff8a3d22;color:var(--o)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pc{background:var(--c);border:1px solid var(--l);border-radius:20px;padding:12px;text-align:center;cursor:pointer}
+.pc .big{display:block;background:#2e9e5b14;border-radius:16px;padding:10px;margin-bottom:8px}
+input,select{width:100%;padding:12px;border-radius:12px;border:1px solid var(--l);background:var(--c);color:var(--t);font-size:15px;margin:4px 0 8px}
+label{font-size:13px;color:var(--m)}
+.cats{display:flex;gap:8px;overflow-x:auto;padding:4px 0}.cats button{flex:none;background:var(--c);border:1px solid var(--l);border-radius:16px;padding:8px 12px;font-size:20px;cursor:pointer;color:var(--t)}
+.cats button.on{background:var(--g);color:#fff}
+.splash{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(160deg,#2E9E5B,#1f7a44);color:#fff;overflow:hidden;position:relative;padding:20px}
+.splash h1{font-size:44px}.splash p{opacity:.9;margin-top:6px}
+.fl{position:absolute;font-size:34px;animation:fl 4s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-22px) rotate(12deg)}}
+.pop{animation:pop .4s}@keyframes pop{from{transform:scale(.8);opacity:0}}
+.steps{display:flex;gap:6px;margin-top:8px}.steps i{flex:1;height:8px;border-radius:6px;background:var(--l)}.steps i.on{background:var(--g)}
+.bar{height:8px;border-radius:6px;background:var(--l);overflow:hidden;margin:6px 0}.bar b{display:block;height:100%;background:var(--g)}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:var(--t);color:var(--bg);padding:10px 18px;border-radius:20px;z-index:9;font-size:14px}
+.dots{display:flex;gap:6px;justify-content:center;margin:14px}.dots i{width:8px;height:8px;border-radius:4px;background:#fff6}.dots i.on{background:#fff;width:22px}
+</style></head><body><div id="app"></div>
+<script>
+const $=s=>document.querySelector(s);
+const P=[{id:1,e:'🍅',n:'طماطم بسكرة',f:'مزرعة بن علي',c:'بسكرة',d:420,p:85,u:'كغ',q:500,avg:110,on:1},
+{id:2,e:'🍊',n:'برتقال المتيجة',f:'مزرعة الأمل',c:'البليدة',d:45,p:140,u:'كغ',q:800,avg:170,on:1},
+{id:3,e:'🌴',n:'تمر دقلة نور',f:'نخيل الزيبان',c:'بسكرة',d:420,p:650,u:'كغ',q:300,avg:800,on:1},
+{id:4,e:'🥔',n:'بطاطا',f:'مزرعة سيدي علي',c:'مستغانم',d:350,p:60,u:'كغ',q:2000,avg:80,on:1},
+{id:5,e:'🫒',n:'زيت زيتون',f:'جنان الزيتون',c:'سطيف',d:300,p:900,u:'لتر',q:200,avg:1100,on:1},
+{id:6,e:'🥕',n:'جزر',f:'مزرعة الأمل',c:'البليدة',d:45,p:70,u:'كغ',q:600,avg:90,on:1}];
+const S={v:'splash',role:null,tab:'home',pid:null,ob:0,cat:'',q:''};
+let O=[],R=[],id=10;
+const ST=['مؤكدة ✅','في الطريق 🚚','تم التسليم 🎉'];
+const fmt=n=>Math.round(n).toLocaleString('en')+' دج';
+function toast(t){const d=document.createElement('div');d.className='toast pop';d.textContent=t;document.body.append(d);setTimeout(()=>d.remove(),2200)}
+function go(o){Object.assign(S,o);draw()}
+function nav(items){return `<nav>${items.map(([k,e,l])=>`<button class="${S.tab==k&&!S.pid?'on':''}" onclick="go({tab:'${k}',pid:null})"><span>${e}</span>${l}</button>`).join('')}</nav>`}
+function head(){return `<header><span>🌱 FarmTech</span><button onclick="go({v:'role',role:null,pid:null,tab:'home'})">${S.role=='f'?'👨‍🌾 فلاح':'🏨 مشتري'} ⇄</button></header>`}
+function draw(){const a=$('#app');
+if(S.v=='splash'){const fl=['🍅','🥕','🍊','🌾','🫒','🍇','🥬','🐑','🍋','🌴'].map((e,i)=>`<span class="fl" style="top:${8+i*9}%;${i%2?'left':'right'}:${6+(i*13)%40}%;animation-delay:${i*.4}s">${e}</span>`).join('');
+a.innerHTML=`<div class="splash">${fl}<div style="font-size:70px" class="pop">🌱🤲</div><h1>FarmTech</h1><h2>فارم تك</h2><p>The Farm Between Your Hands<br>المزرعة بين يديك</p><button class="btn o pop" style="max-width:260px;margin-top:30px" onclick="go({v:'ob'})">يلا نبداو 🚀</button></div>`;return}
+if(S.v=='ob'){const sl=[['🚜➡️🏨','من الفلاح للمشتري مباشرة','بلا وسطاء، بلا مصاريف زايدة'],['💰📊','أسعار شفافة','قارن مع سعر السوق وشوف كل التفاصيل'],['🤝📦','صفقة سريعة','فاوض، اتفق، وتبع طلبيتك']][S.ob];
+a.innerHTML=`<div class="splash"><div style="font-size:70px" class="pop" key="${S.ob}">${sl[0]}</div><h1 style="font-size:26px;margin-top:16px">${sl[1]}</h1><p>${sl[2]}</p><div class="dots">${[0,1,2].map(i=>`<i class="${i==S.ob?'on':''}"></i>`).join('')}</div><button class="btn o" style="max-width:260px" onclick="${S.ob<2?'go({ob:S.ob+1})':"go({v:'role'})"}">${S.ob<2?'التالي':'ابدأ'}</button></div>`;return}
+if(S.v=='role'){a.innerHTML=`<header><span>🌱 FarmTech</span></header><main><h2 style="font-size:24px">شكون نتا؟</h2><p style="color:var(--m)">اختار باش نخدمولك التطبيق</p>
+<div class="card pop" onclick="go({v:'app',role:'f'})" style="cursor:pointer;text-align:center"><div class="big">👨‍🌾</div><h2>أنا فلاح</h2><p style="color:var(--m)">نبيع منتوجي مباشرة</p></div>
+<div class="card pop" onclick="go({v:'app',role:'b'})" style="cursor:pointer;text-align:center"><div class="big">🏨🍽️🏪</div><h2>أنا مشتري</h2><p style="color:var(--m)">فندق / مطعم / محل</p></div></main>`;return}
+const f=S.role=='f';
+a.innerHTML=head()+'<main class="pop">'+(f?farmer():buyer())+'</main>'+(f?nav([['home','🏡','الرئيسية'],['add','➕','أضف'],['mine','🧺','منتوجاتي'],['ord','📦','الطلبيات']]):nav([['home','🛒','السوق'],['ord','📦','طلباتي']]))}
+function track(o){return `<div class="steps">${ST.map((s,i)=>`<i class="${i<=o.s?'on':''}"></i>`).join('')}</div><small style="color:var(--m)">${ST[o.s]}</small>`}
+function farmer(){const t=S.tab;
+if(t=='home'){const pend=O.filter(x=>x.st=='w'),sales=O.reduce((a,x)=>a+x.p*x.q,0)+124500;
+return `<h2>صباح الخير يا فلاح 🌾</h2><div class="grid"><div class="card"><small>مبيعات الأسبوع</small><h2>${fmt(sales)}</h2></div><div class="card"><small>طلبيات اليوم</small><h2>${O.filter(x=>x.st=='a').length+3} 📦</h2></div></div>
+<div class="card"><b>📈 سعر السوق اليوم</b><div class="row sp" style="margin-top:8px"><span>🍅 طماطم</span><span class="chip">110 دج ↑</span></div><div class="row sp"><span>🥔 بطاطا</span><span class="chip o">80 دج ↓</span></div></div>
+<h2>العروض الجديدة (${pend.length})</h2>${pend.length?pend.map(x=>{const p=P.find(y=>y.id==x.pid);return `<div class="card pop"><div class="row"><span class="big">${p.e}</span><div><b>${p.n}</b><br><small>${x.q} ${p.u} × ${fmt(x.p)} • مطعم الأصالة</small></div></div><div class="row" style="margin-top:10px"><button class="btn s" onclick="acc(${x.id})">✅ قبول</button><button class="btn s x" onclick="rej(${x.id})">❌ رفض</button></div></div>`}).join(''):'<div class="card" style="text-align:center;color:var(--m)">🌱 ما كاين حتى عرض. جرب كمشتري وابعت عرض!</div>'}`}
+if(t=='add')return `<h2>أضف منتوج جديد</h2><div class="card"><label>النوع</label><select id="ae"><option>🍅</option><option>🥕</option><option>🍊</option><option>🍇</option><option>🌴</option><option>🥔</option><option>🫒</option><option>🥚</option><option>🍯</option><option>🐑</option></select><label>الاسم</label><input id="an" placeholder="مثلا: كوسة"><label>الكمية (كغ)</label><input id="aq" type="number" value="100"><label>السعر (دج / كغ)</label><input id="ap" type="number" value="100"><label>الولاية</label><select id="ac"><option>البليدة</option><option>مستغانم</option><option>بسكرة</option><option>سطيف</option></select><button class="btn" onclick="addP()">🌱 انشر المنتوج</button></div>`;
+if(t=='mine')return `<h2>منتوجاتي</h2>${P.map(p=>`<div class="card row sp"><div class="row"><span class="big">${p.e}</span><div><b>${p.n}</b><br><small>${p.q} ${p.u} • ${fmt(p.p)}</small></div></div><button class="btn s ${p.on?'':'x'}" onclick="P.find(y=>y.id==${p.id}).on^=1;draw()">${p.on?'متوفر':'مخفي'}</button></div>`).join('')}`;
+return `<h2>الطلبيات</h2>${O.filter(x=>x.st=='a').map(x=>{const p=P.find(y=>y.id==x.pid);return `<div class="card pop"><div class="row"><span class="big">${p.e}</span><div><b>${p.n}</b><br><small>${x.q} ${p.u} • ${fmt(x.p*x.q)}</small></div></div>${track(x)}${x.s<2?`<button class="btn s o" style="margin-top:10px" onclick="x=O.find(y=>y.id==${x.id});x.s++;draw()">⏭️ حدّث الحالة</button>`:''}</div>`}).join('')||'<div class="card" style="text-align:center;color:var(--m)">📦 ما كاين طلبيات بعد</div>'}`}
+function buyer(){
+if(S.pid){const p=P.find(y=>y.id==S.pid);return `<button class="btn s x" onclick="go({pid:null})">→ رجوع</button><div class="card" style="text-align:center;margin-top:12px"><div class="big" style="font-size:90px">${p.e}</div><h2>${p.n}</h2><span class="chip">🌿 مباشر من المزرعة</span> <span class="chip o">✔️ موثق</span><p style="margin-top:8px"><b>${p.f}</b> • 📍 ${p.c} (${p.d} كم) • ⭐ 4.8</p></div>
+<div class="card"><div class="row sp"><b>${fmt(p.p)} / ${p.u}</b><small>سعر السوق ${fmt(p.avg)}</small></div><div class="bar"><b style="width:${p.p/p.avg*100}%"></b></div><small style="color:var(--g)">أرخص بـ ${Math.round(100-p.p/p.avg*100)}% من سعر السوق 👍</small></div>
+<div class="card"><h2 style="margin-top:0">قدّم عرضك 🤝</h2><label>الكمية (${p.u})</label><input id="oq" type="number" value="50" oninput="bd(${p.id})"><label>السعر المقترح (دج / ${p.u})</label><input id="op" type="number" value="${p.p}" oninput="bd(${p.id})"><div id="bd"></div><button class="btn o" onclick="offer(${p.id})">📨 ابعت العرض</button></div><script>bd(${p.id})<\/script>`}
+if(S.tab=='ord'){const mine=O;return `<h2>طلباتي</h2>${mine.map(x=>{const p=P.find(y=>y.id==x.pid);return `<div class="card pop"><div class="row sp"><div class="row"><span class="big">${p.e}</span><div><b>${p.n}</b><br><small>${x.q} ${p.u} • ${fmt(x.p*x.q)}</small></div></div><span class="chip ${x.st=='a'?'':'o'}">${x.st=='w'?'⏳ بانتظار الفلاح':x.st=='a'?'مقبول':'مرفوض'}</span></div>${x.st=='a'?track(x):''}${x.st=='a'&&x.s==2&&!x.r?`<button class="btn s" style="margin-top:8px" onclick="x=O.find(y=>y.id==${x.id});x.r=1;draw();toast('شكرا على تقييمك ⭐')">⭐ قيّم الفلاح</button>`:''}</div>`}).join('')||'<div class="card" style="text-align:center;color:var(--m)">🛒 ما عندك حتى طلب. اختار منتوج من السوق</div>'}`}
+const L=P.filter(p=>p.on&&(!S.cat||p.e==S.cat)&&p.n.includes(S.q));
+return `<input placeholder="🔍 ابحث عن منتوج..." value="${S.q}" oninput="S.q=this.value;clearTimeout(window.tm);window.tm=setTimeout(()=>{draw();$('input').focus();$('input').setSelectionRange(99,99)},400)"><div class="cats"><button class="${S.cat?'':'on'}" onclick="go({cat:''})">الكل</button>${[...new Set(P.map(p=>p.e))].map(e=>`<button class="${S.cat==e?'on':''}" onclick="go({cat:'${e}'})">${e}</button>`).join('')}</div><h2>طازج اليوم 🌤️</h2><div class="grid">${L.map(p=>`<div class="pc pop" onclick="go({pid:${p.id}})"><span class="big">${p.e}</span><b>${p.n}</b><br><small>📍 ${p.c}</small><br><b style="color:var(--g)">${fmt(p.p)}/${p.u}</b></div>`).join('')}</div>`}
+function bd(i){const p=P.find(y=>y.id==i),q=+$('#oq').value||0,pr=+$('#op').value||0,s=q*pr,d=800,fe=s*.02;
+$('#bd').innerHTML=`<div class="card" style="background:var(--bg)"><div class="row sp"><span>سعر الفلاح</span><b>${fmt(s)}</b></div><div class="row sp"><span>التوصيل</span><b>${fmt(d)}</b></div><div class="row sp"><span>عمولة المنصة (2%)</span><b>${fmt(fe)}</b></div><hr style="border:0;border-top:1px solid var(--l);margin:6px 0"><div class="row sp"><b>المجموع</b><b style="color:var(--g)">${fmt(s+d+fe)}</b></div></div>`}
+function offer(i){O.unshift({id:id++,pid:i,q:+$('#oq').value,p:+$('#op').value,st:'w',s:0});toast('تم إرسال العرض 📨');go({pid:null,tab:'ord'})}
+function acc(i){O.find(x=>x.id==i).st='a';toast('تم قبول العرض ✅');draw()}
+function rej(i){O.find(x=>x.id==i).st='r';draw()}
+function addP(){const n=$('#an').value.trim();if(!n)return toast('اكتب اسم المنتوج');const p=+$('#ap').value;P.unshift({id:id++,e:$('#ae').value,n,f:'مزرعتي',c:$('#ac').value,d:60,p,u:'كغ',q:+$('#aq').value,avg:Math.round(p*1.2),on:1});toast('تم نشر المنتوج 🌱');go({tab:'mine'})}
+draw();
+</script></body></html>
